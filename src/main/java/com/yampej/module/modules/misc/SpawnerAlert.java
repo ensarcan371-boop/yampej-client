@@ -85,8 +85,7 @@ public class SpawnerAlert extends Module {
 
     private String getSpawnerTypeFromNbt(MobSpawnerBlockEntity spawner, MinecraftClient mc) {
         try {
-            NbtCompound nbt = new NbtCompound();
-            spawner.writeNbt(nbt, mc.world.getRegistryManager());
+            NbtCompound nbt = spawner.createNbt(mc.world.getRegistryManager());
 
             String entityId = "unknown";
             if (nbt.contains("SpawnData")) {

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.yampej.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ClientMixin",
+    "GameRendererMixin",
+    "InGameHudMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

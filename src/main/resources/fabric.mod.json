@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "yampej",
+  "version": "${version}",
+  "name": "Yampej Client",
+  "description": "Yampej Minecraft Client for Fabric 1.21.4",
+  "authors": ["Yampej"],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.yampej.YampejClient"]
+  },
+  "mixins": ["yampej.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "fabric-api": "*",
+    "minecraft": "1.21.4"
+  }
+}

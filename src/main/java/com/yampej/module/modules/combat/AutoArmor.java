@@ -4,6 +4,7 @@ import com.yampej.module.Category;
 import com.yampej.module.Module;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.SlotActionType;
@@ -24,7 +25,7 @@ public class AutoArmor extends Module {
             if (stack.isEmpty()) continue;
             if (!(stack.getItem() instanceof ArmorItem armor)) continue;
 
-            EquipmentSlot eqSlot = armor.getSlotType();
+            EquipmentSlot eqSlot = MobEntity.getPreferredEquipmentSlot(stack);
             int armorSlot = switch (eqSlot) {
                 case HEAD  -> 5;
                 case CHEST -> 6;

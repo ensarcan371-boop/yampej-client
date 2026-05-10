@@ -29,6 +29,7 @@ public class ModuleManager {
         register(new Nametag());
 
         // Misc
+        register(new SpawnerAlert());
         register(new ChatSuffix());
         register(new DiscordRPC());
         register(new MiddleClickFriend());

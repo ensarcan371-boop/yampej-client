@@ -91,7 +91,7 @@ public class SpawnerAlert extends Module {
             var logic = spawner.getLogic();
             if (mc.world == null) return "Unknown";
 
-            var spawnEntry = logic.getSpawnEntry(mc.world, spawner.getPos());
+            var spawnEntry = logic.getSpawnEntry(mc.world, mc.world.random, spawner.getPos());
             if (spawnEntry == null) return "Unknown";
 
             EntityType<?> entityType = spawnEntry.type();

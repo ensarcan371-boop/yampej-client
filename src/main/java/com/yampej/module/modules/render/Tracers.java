@@ -31,9 +31,9 @@ public class Tracers extends Module {
         double cy = mc.getEntityRenderDispatcher().camera.getPos().y;
         double cz = mc.getEntityRenderDispatcher().camera.getPos().z;
 
-        float ex = (float)(entity.getLerpedX(tickDelta) - cx);
-        float ey = (float)(entity.getLerpedY(tickDelta) + entity.getHeight() / 2.0 - cy);
-        float ez = (float)(entity.getLerpedZ(tickDelta) - cz);
+        float ex = (float)(entity.getX() - cx);
+        float ey = (float)(entity.getY() + entity.getHeight() / 2.0 - cy);
+        float ez = (float)(entity.getZ() - cz);
 
         matrices.push();
         VertexConsumer consumer = consumers.getBuffer(RenderLayer.getLines());

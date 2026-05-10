@@ -6,8 +6,7 @@ import com.yampej.util.Config;
 import com.yampej.util.WebhookSender;
 import net.minecraft.block.entity.MobSpawnerBlockEntity;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.EntityType;
-import net.minecraft.registry.Registries;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.WorldChunk;
@@ -58,8 +57,7 @@ public class SpawnerAlert extends Module {
 
                 chunk.getBlockEntities().forEach((pos, be) -> {
                     if (!(be instanceof MobSpawnerBlockEntity spawner)) return;
-
-                    String typeName = getSpawnerType(spawner, mc);
+                    String typeName = getSpawnerTypeFromNbt(spawner, mc);
                     foundThisScan.put(pos.toImmutable(), typeName);
                 });
             }
@@ -72,7 +70,6 @@ public class SpawnerAlert extends Module {
             String type = entry.getValue();
 
             if (reportedSpawners.containsKey(pos)) continue;
-
             reportedSpawners.put(pos, type);
 
             final int x = pos.getX(), y = pos.getY(), z = pos.getZ();
@@ -86,38 +83,46 @@ public class SpawnerAlert extends Module {
         reportedSpawners.keySet().removeIf(pos -> !foundThisScan.containsKey(pos));
     }
 
-    private String getSpawnerType(MobSpawnerBlockEntity spawner, MinecraftClient mc) {
+    private String getSpawnerTypeFromNbt(MobSpawnerBlockEntity spawner, MinecraftClient mc) {
         try {
-            var logic = spawner.getLogic();
-            if (mc.world == null) return "Unknown";
+            NbtCompound nbt = new NbtCompound();
+            spawner.writeNbt(nbt, mc.world.getRegistryManager());
 
-            var spawnEntry = logic.getSpawnEntry(mc.world, mc.world.random, spawner.getPos());
-            if (spawnEntry == null) return "Unknown";
-
-            EntityType<?> entityType = spawnEntry.type();
-            String id = Registries.ENTITY_TYPE.getId(entityType).getPath();
-
-            return switch (id) {
-                case "zombie"           -> "Zombie";
-                case "skeleton"         -> "Iskelet";
-                case "spider"           -> "Orumcek";
-                case "cave_spider"      -> "Magara Orumcegi";
-                case "blaze"            -> "Blaze";
-                case "silverfish"       -> "Silverfish";
-                case "creeper"          -> "Creeper";
-                case "zombie_pigman", "zombified_piglin" -> "Zombi Piglin";
-                case "enderman"         -> "Enderman";
-                case "witch"            -> "Cadi";
-                case "piglin"           -> "Piglin";
-                case "husk"             -> "Husk";
-                case "stray"            -> "Stray";
-                case "drowned"          -> "Bogulmus";
-                case "wither_skeleton"  -> "Wither Iskelet";
-                case "guardian"         -> "Guardian";
-                default -> Character.toUpperCase(id.charAt(0)) + id.substring(1).replace("_", " ");
-            };
+            String entityId = "unknown";
+            if (nbt.contains("SpawnData")) {
+                NbtCompound spawnData = nbt.getCompound("SpawnData");
+                if (spawnData.contains("entity")) {
+                    NbtCompound entity = spawnData.getCompound("entity");
+                    entityId = entity.getString("id").replace("minecraft:", "");
+                }
+            }
+            return formatEntityName(entityId);
         } catch (Exception e) {
             return "Unknown";
         }
+    }
+
+    private String formatEntityName(String id) {
+        return switch (id) {
+            case "zombie"           -> "Zombie";
+            case "skeleton"         -> "Iskelet";
+            case "spider"           -> "Orumcek";
+            case "cave_spider"      -> "Magara Orumcegi";
+            case "blaze"            -> "Blaze";
+            case "silverfish"       -> "Silverfish";
+            case "creeper"          -> "Creeper";
+            case "zombified_piglin" -> "Zombi Piglin";
+            case "enderman"         -> "Enderman";
+            case "witch"            -> "Cadi";
+            case "piglin"           -> "Piglin";
+            case "husk"             -> "Husk";
+            case "stray"            -> "Stray";
+            case "drowned"          -> "Bogulmus";
+            case "wither_skeleton"  -> "Wither Iskelet";
+            case "guardian"         -> "Guardian";
+            case "unknown"          -> "Unknown";
+            default -> id.isEmpty() ? "Unknown"
+                : Character.toUpperCase(id.charAt(0)) + id.substring(1).replace("_", " ");
+        };
     }
 }

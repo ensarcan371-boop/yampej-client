@@ -20,12 +20,11 @@ public class AutoArmor extends Module {
         for (int i = 0; i < 36; i++) {
             var stack = inv.getStack(i);
             if (stack.getItem() instanceof ArmorItem armor) {
-                int armorSlot = switch (armor.getMaterial().toString()) {
-                    case "minecraft:helmet"     -> 5;
-                    case "minecraft:chestplate" -> 6;
-                    case "minecraft:leggings"   -> 7;
-                    case "minecraft:boots"      -> 8;
-                    default -> -1;
+                int armorSlot = switch (armor.getType()) {
+                    case HELMET     -> 5;
+                    case CHESTPLATE -> 6;
+                    case LEGGINGS   -> 7;
+                    case BOOTS      -> 8;
                 };
                 if (armorSlot < 0) continue;
                 if (mc.player.playerScreenHandler.getSlot(armorSlot).getStack().isEmpty()) {

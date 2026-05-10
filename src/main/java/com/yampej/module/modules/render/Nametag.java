@@ -34,7 +34,7 @@ public class Nametag extends Module {
         Text text = Text.literal(sb.toString());
         TextRenderer tr = mc.textRenderer;
 
-        float s = (float) scale.getValue() * 0.025f;
+        float s = scale.getValue().floatValue() * 0.025f;
         matrices.push();
         matrices.translate(0, entity.getHeight() + 0.5, 0);
         matrices.multiply(mc.getEntityRenderDispatcher().getRotation());

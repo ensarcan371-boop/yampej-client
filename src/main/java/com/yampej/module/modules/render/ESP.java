@@ -34,9 +34,9 @@ public class ESP extends Module {
         if (!players.getValue() && entity instanceof PlayerEntity) return;
         if (!mobs.getValue() && entity instanceof MobEntity) return;
 
-        double x = entity.getLerpedX(tickDelta) - mc.getEntityRenderDispatcher().camera.getPos().x;
-        double y = entity.getLerpedY(tickDelta) - mc.getEntityRenderDispatcher().camera.getPos().y;
-        double z = entity.getLerpedZ(tickDelta) - mc.getEntityRenderDispatcher().camera.getPos().z;
+        double x = entity.getX() - mc.getEntityRenderDispatcher().camera.getPos().x;
+        double y = entity.getY() - mc.getEntityRenderDispatcher().camera.getPos().y;
+        double z = entity.getZ() - mc.getEntityRenderDispatcher().camera.getPos().z;
 
         Box box = entity.getBoundingBox().offset(-entity.getX() + x, -entity.getY() + y, -entity.getZ() + z);
 
